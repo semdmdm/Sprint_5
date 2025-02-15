@@ -1,5 +1,6 @@
 import pytest
 import time
+import random
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -13,44 +14,26 @@ from locators import Locators
 
 class TestRegistration:
 
-    def setup_method(self):  # Здесь использовал setup_method вместо конструктора __init__,
-        # т.к. он более спокойно работет в связке с pytest по инф с хабра
-        self.name = "Дмитрий"
-        self.email = "Semenov_Dmitry_15_QA_FS_275@mail.ru"
-        self.correct_password = "sd15qafs"
-        self.incorrect_password = "sd"
-
-    def test_registration_incorrect_password_error_Chrome(self, driver):
+    def test_registration_incorrect_password_error_Chrome(self, driver, data):
         driver.find_element(By.XPATH, Locators.PERSONAL_ACCOUNT_BUTTON).click()
         driver.find_element(By.XPATH, Locators.REGISTER_BUTTON_PERSONAL_ACCOUNT_PAGE).click()
-        driver.find_element(By.XPATH, Locators.NAME_INPUT_REGISTRATION).send_keys(self.name)
-        driver.find_element(By.XPATH, Locators.EMAIL_INPUT_REGISTRATION).send_keys(self.email)
-        driver.find_element(By.XPATH, Locators.PASSWORD_INPUT_REGISTRATION).send_keys(self.incorrect_password)
+        driver.find_element(By.XPATH, Locators.NAME_INPUT_REGISTRATION).send_keys(data["name"])
+        driver.find_element(By.XPATH, Locators.EMAIL_INPUT_REGISTRATION).send_keys(data["email_random"])
+        driver.find_element(By.XPATH, Locators.PASSWORD_INPUT_REGISTRATION).send_keys(data["incorrect_password"])
         driver.find_element(By.XPATH, Locators.REGISTER_BUTTON_REGISTER_PAGE).click()
         error = driver.find_element(By.XPATH, Locators.ERROR_MESSAGE).text
         assert error == "Некорректный пароль"
-        driver.quit()
 
-    def test_succesfull_registration_Chrome(self, driver):
+    def test_succesfull_registration_Chrome(self, driver, data):
         driver.find_element(By.XPATH, Locators.PERSONAL_ACCOUNT_BUTTON).click()
         driver.find_element(By.XPATH, Locators.REGISTER_BUTTON_PERSONAL_ACCOUNT_PAGE).click()
-        driver.find_element(By.XPATH, Locators.NAME_INPUT_REGISTRATION).send_keys(self.name)
-        driver.find_element(By.XPATH, Locators.EMAIL_INPUT_REGISTRATION).send_keys(self.email)
-        driver.find_element(By.XPATH, Locators.PASSWORD_INPUT_REGISTRATION).send_keys(self.correct_password)
+        driver.find_element(By.XPATH, Locators.NAME_INPUT_REGISTRATION).send_keys(data["name"])
+        driver.find_element(By.XPATH, Locators.EMAIL_INPUT_REGISTRATION).send_keys(data["email_random"])
+        driver.find_element(By.XPATH, Locators.PASSWORD_INPUT_REGISTRATION).send_keys(data["correct_password"])
         driver.find_element(By.XPATH, Locators.REGISTER_BUTTON_REGISTER_PAGE).click()
-        time.sleep(2)   # Тут пришлось использовать sleep т.к. через WebDriverWait и expected_conditions вообще
-        # никак не получается выдержать тайминг после нажатия кнопки "Зарегистрироваться", не помогают ни функции
-        # ни по кликабельности ни по визуализации, вообще никак не смог (каждый раз после нажатия кнопки есть какая
-        # задержка именно на кнопке "Зарегистрироваться", которая не дает потом на след странице
-        # ввести email, прыгает через этот шаг. (работает только с импортированием time)
-        # Осознаю (прочитал на хабре), что вариант с принудительной задержкой
-        # - остановкой теста не самый лучший и опасный, но иначе не смог в данном случае.
-        # Спецом сделал заготовки по visibility и clickable и оставил импорты в шапке
-        # WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located((By.XPATH, Locators.EMAIL_INPUT)))
-        # WebDriverWait(driver, 3).until(expected_conditions.element_to_be_clickable((By.XPATH, Locators.EMAIL_INPUT)))
-        driver.find_element(By.XPATH, Locators.EMAIL_INPUT).send_keys(self.email)
-        driver.find_element(By.XPATH, Locators.PASSWORD_INPUT).send_keys(self.correct_password)
+        WebDriverWait(driver, 3).until(expected_conditions.element_to_be_clickable((By.XPATH, Locators.ENTER_BUTTON_PERSONAL_ACCOUNT)))
+        driver.find_element(By.XPATH, Locators.EMAIL_INPUT).send_keys(data["email_random"])
+        driver.find_element(By.XPATH, Locators.PASSWORD_INPUT).send_keys(data["correct_password"])
         driver.find_element(By.XPATH, Locators.ENTER_BUTTON_PERSONAL_ACCOUNT).click()
         driver.find_element(By.XPATH, Locators.PERSONAL_ACCOUNT_BUTTON).click()
         assert driver.current_url == 'https://stellarburgers.nomoreparties.site/account'
-        driver.quit()
