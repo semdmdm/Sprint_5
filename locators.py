@@ -12,6 +12,7 @@ class Locators:
     SAUCES_BUTTON = ".//span[text()='Соусы']"   # Кнопка переключения "Соусы" в конструкторе (XPATH)
     FILLINGS_BUTTON = ".//span[text()='Начинки']"   # Кнопка переключения "Начинки" в конструкторе (XPATH)
     CONSTRUCTOR_SELECTED_SECTION = ".//div[contains(@class, 'tab_tab_type_current__2BEPc')]"   # Локатор выбранного раздела в конструкторе (XPATH)
+    CONSTRUCTOR_SELECTED_SECTION_SPAN = ".//div[contains(@class, 'tab_tab_type_current__2BEPc')]//span"   # Локатор на дочерний SPAN выбранного раздела в конструкторе  (XPATH)
     EMAIL_INPUT = ".//input[@type='text' and @name='name']"   # Поле ввода email (XPATH)
     PASSWORD_INPUT = ".//input[@type='password' and @name='Пароль']"   # Поле ввода пароля (XPATH)
     REGISTER_BUTTON_PERSONAL_ACCOUNT_PAGE = ".//a[contains(@class, 'Auth_link__') and @href='/register']"   # Кнопка "Зарегистрироваться" на странице входа в личный кабинет (XPATH)
