@@ -18,8 +18,8 @@ class TestConstructorSections:
         driver.find_element(By.XPATH, Locators.PERSONAL_ACCOUNT_BUTTON).click()
         driver.find_element(By.XPATH, Locators.CONSTRUCTOR_BUTTON).click()
         driver.find_element(By.XPATH, Locators.SAUCES_BUTTON).click()   # Здесь единственный случай, где необходимо инициализировать # переключение на сторонний раздел "Соусы", т.к. страница изначально открывается на разделе "Булки"
-        driver.find_element(By.XPATH, Locators.BUNS_BUTTON).click()   # Здесь выставляем специально задержку на время пока текст активного/выбранного раздела подтянется в   # текст класса и текст span будет равен "Булки" в html-коде, т.к. если без задержки результат "Соусы".
-        selected_section = driver.find_element(By.XPATH, Locators.CONSTRUCTOR_SELECTED_SECTION_SPAN).text   # Создаем переменную, которая   # содержит текст/название текущего выбранного раздела.   # Локатор CONSTRUCTOR_SELECTED_SECTION содержит код !!ИМЕННО ВЫБРАННОГО РАЗДЕЛА!! специально смотрел в html как реагирует код   # при переключении разделов - в класс дописывается "tab_tab_type_current__2BEPc" именно при выборе раздела
+        driver.find_element(By.XPATH, Locators.BUNS_BUTTON).click()   
+        selected_section = driver.find_element(By.XPATH, Locators.CONSTRUCTOR_SELECTED_SECTION_SPAN).text   # Создаем переменную, которая   # содержит текст дочернего span выбранного раздела   # Локатор CONSTRUCTOR_SELECTED_SECTION_SPAN содержит код !!ИМЕННО ВЫБРАННОГО РАЗДЕЛА!! "tab_tab_type_current__2BEPc" именно при выборе раздела
         assert selected_section == "Булки"
 
     def test_constructor_sauces_button_Chrome(self, driver, data):
